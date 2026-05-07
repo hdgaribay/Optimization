@@ -31,10 +31,6 @@ module decode (
     wire [3:0]  ex_internal;
     wire        bubble_signal;
 
-    // Hazard detection unit: detects load-use hazards and asserts
-    // stall_pc, stall_ifid (write-enables for PC and IF/ID — active high
-    // means "allow update"; low means "freeze") and bubble (active high
-    // means "inject a NOP into ID/EX").
     hazard_detection hd0 (
         .id_ex_memread(id_ex_memread),
         .id_ex_rt     (id_ex_rt_for_haz),
@@ -71,9 +67,7 @@ module decode (
         .ex(ex_internal)
     );
 
-    // Bubble injection: zero out control signals when the hazard unit
-    // detects a stall. Datapath values still flow through, but with
-    // wb=00, mem=000, ex=0000 the instruction commits nothing.
+    // wb=00, mem=000, ex=0000 the instruction commits nothing
     wire [1:0] wb_to_latch  = bubble_signal ? 2'b00   : wb_internal;
     wire [2:0] mem_to_latch = bubble_signal ? 3'b000  : mem_internal;
     wire [3:0] ex_to_latch  = bubble_signal ? 4'b0000 : ex_internal;

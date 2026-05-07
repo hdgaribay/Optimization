@@ -64,7 +64,7 @@ module mips_pipeline_tb;
                  uut.wb_write_data,
                  uut.wb_write_reg);
 
-        // Watch the registers we care about
+        // Watch the registers
         $display("  REGS  : R0=%h  R1=%h  R2=%h  R3=%h",
                  uut.ID_stage.rf0.REG[0],
                  uut.ID_stage.rf0.REG[1],
