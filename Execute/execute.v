@@ -35,15 +35,15 @@ forwarding_unit fu0 (
     .mem_wb_regwrite (mem_wb_regwrite_in),
     .mem_wb_write_reg(mem_wb_write_reg_in),
     .id_ex_rs        (id_ex_rs),
-    .id_ex_rt        (instrout_2016),  // already in your module — this is rt
+    .id_ex_rt        (instrout_2016), 
     .forward_a       (forward_a),
     .forward_b       (forward_b)
 );
-
-assign alu_a_in = (forward_a == 2'b10) ? alu_result        :
-                  (forward_a == 2'b01) ? mem_wb_write_data :
+// top input to alu
+assign alu_a_in = (forward_a == 2'b10) ? alu_result        : // if forward asserts 10, forward alu result from ex
+                  (forward_a == 2'b01) ? mem_wb_write_data :  // if forward asserts 01, forward alu result from data mem
                                          rdata1;
-
+//bottom input to alu
 assign fwd_b_out = (forward_b == 2'b10) ? alu_result        :
                    (forward_b == 2'b01) ? mem_wb_write_data :
                                           rdata2;
